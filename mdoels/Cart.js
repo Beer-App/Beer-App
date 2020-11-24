@@ -9,7 +9,7 @@ const cartSchema = new Schema({
       },
       products: [
         {
-          productId: Number,
+          productId:  mongoose.Schema.Types.ObjectId,
           quantity: Number,
           name: String,
           price: Number
@@ -22,7 +22,11 @@ const cartSchema = new Schema({
       modifiedOn: {
         type: Date,
         default: Date.now
-      }
-    },
-    { timestamps: true }
-})
+      },
+},{ timestamps: true })
+
+const Cart = mongoose.model("Cart", cartSchema);
+
+module.exports = Cart;
+
+

@@ -5,8 +5,16 @@
     <h5 class="card-title">{{this.name}}</h5>
     <p class="card-text">{{this.description}}</p>
     <p> <b> {{this.price}} &euro;</b></p> 
-    <a href="/add" class="btn btn-primary">Add</a>
-  </div>
+    <a href="#" class="btn btn-primary cart-add">Buy</a>
+    
+    <form action="/{{this._id}}/add" method="POST">
+     <input type="text" name="quantity" id="quantity">
+    <button type = "submit" class = "btn btn-primary cart-add" >Add</button>
+    </form>
 </div>
 
+
 {{/each}}
+
+
+</script>
