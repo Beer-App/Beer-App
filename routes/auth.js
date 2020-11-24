@@ -3,11 +3,12 @@ const router  = express.Router();
 const User = require('../mdoels/Users')
 const bcrypt =  require('bcrypt')
 const passport = require('passport');
+const {loginCheck} = require('./middlewares');
 
-router.get('/login', (req,res) => {
+router.get('/login',loginCheck(), (req,res) => {
     res.render('auth/login')
 })
-router.get('/signup', (req,res) => {
+router.get('/signup',loginCheck(), (req,res) => {
     res.render('auth/signup')
 })
 
