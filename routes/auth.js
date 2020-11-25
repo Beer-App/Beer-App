@@ -4,6 +4,7 @@ const User = require('../mdoels/Users')
 const bcrypt =  require('bcrypt')
 const passport = require('passport');
 const {loginCheck} = require('./middlewares');
+const Cart = require('../mdoels/Cart')
 
 router.get('/login',loginCheck(), (req,res) => {
     res.render('auth/login')

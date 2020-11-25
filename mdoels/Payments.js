@@ -2,25 +2,22 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const userSchema = new Schema({
-    username: String,
-    password: String, 
-    purchased:[
-        {
+const paymentSchema = new Schema({
+    
+            userId:{type:Schema.Types.ObjectId,ref:'User'},
             products:[{
             productId:{type: 
-                Schema.Types.ObjectId,
-                ref: 'Beer'
+                Schema.Types.ObjectId
             },
             quantity:{type:Number, default:3}
             }],
             paymentType:{type:String, default:'IBAN'} ,
-            totalPaid:Number,
             date:{type:Date, default:Date.now()}
-        }
-    ]
+        
+    
+
 });
 
-const User = mongoose.model("User", userSchema);
+const Payment = mongoose.model("Payment", paymentSchema);
 
-module.exports = User;
+module.exports = Payment;
