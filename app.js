@@ -9,7 +9,7 @@ const bodyParser   = require('body-parser');
 const hbs = require('hbs');
 
 mongoose
-  .connect('mongodb://localhost/beer-project', {
+  .connect(process.env.MONGODB_URI||'mongodb://localhost/beer-project', {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
