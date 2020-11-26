@@ -4,7 +4,7 @@ const User = require('../mdoels/Users')
 const Beer = require('../mdoels/Beers')
 const Cart = require('../mdoels/Cart')
 const Payment = require('../mdoels/Payments')
-let dataCart= [];
+
 let aggSum = 0;
 
 router.post('/:id/add', (req, res, next) => {
@@ -25,13 +25,14 @@ router.post('/:id/add', (req, res, next) => {
 });
 
 router.get('/checkout', (req,res,next) => {
+  let dataCart= [];
   Cart.findOne({userId:req.user._id})
   .then(data => {
       data.products.forEach((val,index) => {
       
        var clone = JSON.parse(JSON.stringify(val))
        clone.total = clone.price * clone.quantity
-       console.log(val)
+       //console.log(val)
        dataCart.push(clone)
      })
    
@@ -79,7 +80,29 @@ router.post('/payment',(req,res,next) => {
 
         })
  
-
+router.post('/discard/:id', (req,res,next) => {
+  let query;
+  //console.log(req.params.id)
+  Cart.findOne({ "products": { $elemMatch: {_id:req.params.id} } })
+  .then(data => {
+    console.log(req.params.id+" this is teh data --->> ",data)
+    query = data.products;
+  })
+  .then(()=> {
+    for(let q of query) {
+      if(q._id == req.params.id) {
+        console.log(q._id, " prmm")
+        //Cart.products.pull({_id:req.params.id})
+        Cart.findOneAndUpdate({ "products": { $elemMatch: {"_id":req.params.id} }},
+        {$pull:{"products":{"_id":req.params.id}} })
+        .then(data => console.log(data, "  remove"))
+        res.redirect('/checkout')
+      }
+    }
+  })
+  .catch(err => next(err))
+ 
+})
 
 
 module.exports = router;

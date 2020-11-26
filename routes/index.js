@@ -2,25 +2,29 @@ const express = require('express');
 const router  = express.Router();
 const Beer = require('../mdoels/Beers')
 const Cart = require('../mdoels/Cart')
-let isCreated;
+var mongoose = require('mongoose');
+ 
 /* GET home page. */
 router.get('/', (req, res, next) => {
   Beer.find()
   .then(data => res.render('index', {data}))
   .catch(err => next(err))
-
+  let isCreated;
   if(req.user) {
-    Cart.findOne({userId:req.user._id})
+    Cart.findOne({userId:mongoose.Types.ObjectId(req.user.id)})
     .then(data => {
       if(!data) {
+        console.log(data)
        isCreated = data;
       }
     })
     .then( () => {
-      console.log(isCreated, " first ")
+      if(isCreated !== undefined) {
+        console.log(isCreated, " first ")
         Cart.create({userId:req.user._id})
         .then(data => console.log(data, " new cart"))
-
+      }
+      
     })
   }
 });

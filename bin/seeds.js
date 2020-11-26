@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
 const Beer = require('../mdoels/Beers');
 const User = require('../mdoels/Users');
-
-mongoose.connect('mongodb://localhost/beer-project', {
+require('dotenv').config({
+  path: require('path').resolve(__dirname, '../.env') // search for .env in the parent folder
+});
+mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
