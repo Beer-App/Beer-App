@@ -24,22 +24,9 @@
 </ul>
 </nav>
 {{/unless}}
-<div class = "d-flex justify-content-between flex-wrap">
-{{#each data}}
-<div class="card border" style="width: 13rem; height: 12rem">
-  <img class="card-img-top" src="{{this.image_url}}" alt="Card image cap" style="height: 12rem; width:12rem">
-  <div class="card-body border">
-    <a href="details/{{this._id}}" class="nav-link">
-    <h5 class="card-title">{{this.name}}</h5>
-    </a>
-    <!-- <p class="card-text">{{this.description}}</p>  -->
-    <p> <b> {{this.price}} &euro;</b></p> 
-    <form action="/{{this._id}}/add" method="POST">
-     <input type="text" name="quantity" id="quantity" value="0">
-    <button type = "submit" class = "btn btn-primary cart-add" >Add</button>
-    </form>
+<div class = "details">
+<img src="{{data.image_url}}" alt="beer-image" class ="details-image">
+<h1>{{data.name}}</h1>
+<h2>{{data.tagline}}</h2>
+<p>{{data.description}}</p>
 </div>
-</div>
-{{/each}}
-
-

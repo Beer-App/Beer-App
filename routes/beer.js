@@ -5,10 +5,11 @@ const Beer = require('../mdoels/Beers')
 const Cart = require('../mdoels/Cart')
 const Payment = require('../mdoels/Payments')
 
-let aggSum = 0;
+
 
 router.post('/:id/add', (req, res, next) => {
   const {quantity } = req.body;
+  if(quantity == 0) {return res.redirect('/')}
    Beer.findById(req.params.id)
    .then(data => {
      console.log(data.price)
@@ -25,25 +26,32 @@ router.post('/:id/add', (req, res, next) => {
 });
 
 router.get('/checkout', (req,res,next) => {
+  let aggSum = 0;
   let dataCart= [];
   Cart.findOne({userId:req.user._id})
   .then(data => {
       data.products.forEach((val,index) => {
       
        var clone = JSON.parse(JSON.stringify(val))
-       clone.total = clone.price * clone.quantity
-       //console.log(val)
+       clone.total = (clone.price) * (clone.quantity)
+       console.log(clone.total,"--P"+clone.price+"---Q:"+clone.quantity)
        dataCart.push(clone)
+       console.log(clone)
      })
-   
+    console.log(dataCart)
     
-    dataCart.forEach(obj => aggSum += obj.total)
-    res.render('beer/checkout',{data:dataCart, aggSum:aggSum})
+    
+  }).then(() => {      
+    dataCart.forEach(obj => {aggSum += obj.total
+    console.log(obj)
+    })
+    res.render('beer/checkout',{data:dataCart, aggSum:aggSum, user:req.user})
   })
+ 
   .catch(err => next(err))
 })
 router.post('/payment',(req,res,next) => {
-  console.log(aggSum)
+  
   let paymentId = [];
    //products:{$push:{productId:val.productId,quantity:val.quantity}
      
@@ -53,7 +61,6 @@ router.post('/payment',(req,res,next) => {
           console.log(data, " created")
           paymentId.push(data)})
           .then( () => {
-            console.log(dataCart, " dataCart")
             for (let val of dataCart) {
             console.log(paymentId ," vall")
           Payment.findByIdAndUpdate(paymentId,{$push:{products:{productId:val.productId,quantity:val.quantity}}} )
@@ -62,7 +69,7 @@ router.post('/payment',(req,res,next) => {
             }
 
           })
-            
+           res.render('beer/payment', {user:req.user}) 
 
           
         //.catch(err => next(err))
@@ -104,7 +111,10 @@ router.post('/discard/:id', (req,res,next) => {
  
 })
 
-
+router.get('/details/:id', (req,res) => {
+  Beer.findById(req.params.id)
+  .then(data => res.render('beer/details', {data:data, user:req.user}))
+})
 module.exports = router;
 
 /*dataCart.forEach(val => {

@@ -5,14 +5,39 @@
     <li>{{this.quantity}}</li>
     {{/each}}
 </ul> -->
-
+{{#if user}}
+<nav class="navbar navbar-expand-sm bg-dark">
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link text-white" href="/">Home</a>
+    </li>
+  </ul>
+   <a class="nav-link text-white" href="/checkout">Checkout</a>
+   <a class="nav-link text-white" href="/logout">Logout</a>
+</nav>
+{{/if}}
+{{#unless user}}
+<nav class="navbar navbar-expand-sm bg-dark">
+<ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link text-white" href="/">Home</a>
+      </li>
+      <li class="nav-item">
+      <a class="nav-link text-white" href="/login">Login</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link text-white" href="/signup">Signup</a>
+    </li>
+</ul>
+</nav>
+{{/unless}}
 <table class="table table-dark">
   <thead>
     <tr>
     
       <th scope="col">Product</th>
       <th scope="col">Quantity</th>
-      <th scope="col">Total</th>
+      <th scope="col">Price</th>
     </tr>
   </thead>
   <tbody>
@@ -20,7 +45,7 @@
     <tr>
       <td>{{this.name}}</td>
       <td>{{this.quantity}}</td>
-      <td>{{this.total}}</td>
+      <td>{{this.price}}</td>
       <td>
         <form action="/discard/{{this._id}}" method="POST" style=" display:inline!important;">
            <button type="submit" class="btn btn-primary">Discard</button>
@@ -28,13 +53,21 @@
       </td>
     </tr>
     {{/each}}
+    <tfoot>
+    <tr>
+      <td>Sum</td>
+      <td></td>
+      <td>&euro;{{aggSum}}</td>
+    </tr>
+  </tfoot>
   </tbody>
 </table>
 
 
 
 
-<form action="/payment" method="post">
-    <label for="Card Number"></label>
-    <button>Pay</button>
+<form action="/payment"class = "form-group" method="post">
+    <label for="cardNumber">Card Number</label>
+    <input type="text" class = "form-group" name="cardNumber">
+    <button type="submit" class="btn btn-success btn-lg">Pay</button>
 </form>

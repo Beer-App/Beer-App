@@ -95,7 +95,23 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
+hbs.registerHelper('select', function () {
+  
+    return `<ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link text-white" href="/">Home</a>
+      </li>
+      <li class="nav-item">
+      <a class="nav-link text-white" href="/login">Login</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link text-white" href="/signup">Signup</a>
+    </li>
+      </ul>`
+  
+  
+  
+});
 const index = require('./routes/index');
 app.use('/', index);
 

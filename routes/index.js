@@ -3,11 +3,13 @@ const router  = express.Router();
 const Beer = require('../mdoels/Beers')
 const Cart = require('../mdoels/Cart')
 var mongoose = require('mongoose');
- 
+ /*background: #007bff;
+  background: linear-gradient(to right, #0062E6, #33AEFF);*/
 /* GET home page. */
 router.get('/', (req, res, next) => {
+  
   Beer.find()
-  .then(data => res.render('index', {data}))
+  .then(data => res.render('index', {data,user:req.user}))
   .catch(err => next(err))
   let isCreated;
   if(req.user) {

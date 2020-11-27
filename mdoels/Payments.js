@@ -9,7 +9,7 @@ const paymentSchema = new Schema({
             productId:{type: 
                 Schema.Types.ObjectId
             },
-            quantity:{type:Number, default:3}
+            quantity:{type:Number}
             }],
             paymentType:{type:String, default:'IBAN'} ,
             date:{type:Date, default:Date.now()}

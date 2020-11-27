@@ -7,22 +7,23 @@ const {loginCheck} = require('./middlewares');
 const Cart = require('../mdoels/Cart')
 
 router.get('/login',loginCheck(), (req,res) => {
-    res.render('auth/login')
+    res.render('auth/login', {user:req.user})
 })
 router.get('/signup',loginCheck(), (req,res) => {
-    res.render('auth/signup')
+    res.render('auth/signup', {user:req.user})
 })
 
 router.post('/signup', (req,res,next) => {
     const {username, password} = req.body
     if (password.length < 1) {
         res.render('auth/signup', {
-          message: 'Your password must be 8 characters minimun.'
+          message: 'Your password must be 8 characters minimun.',
+          user:req.user
         });
         return;
       }
       if (username === '') {
-        res.render('auth/signup', { message: 'Your username cannot be empty' });
+        res.render('auth/signup', { message: 'Your username cannot be empty',});
         return;
       }
       User.findOne({ username: username }).then(found => {
@@ -62,6 +63,7 @@ router.post(
   
   router.get('/logout', (req, res) => {
     req.logout();
+    req.user = null
     res.redirect('/');
   })
 
