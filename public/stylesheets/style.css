@@ -16,7 +16,13 @@ a {
   flex-direction: column;
   text-align: center;
 }
+
+.detail-text {
+  padding-left: 130px;
+  padding-right: 130px;
+}
 .details-image {
+margin-top: 15px;
 height: 30%;
 width: 6%;
 }
