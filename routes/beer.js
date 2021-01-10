@@ -5,7 +5,7 @@ const Beer = require('../mdoels/Beers')
 const Cart = require('../mdoels/Cart')
 const Payment = require('../mdoels/Payments')
 
-
+let dataCart;
 
 router.post('/:id/add', (req, res, next) => {
   const {quantity } = req.body;
@@ -27,9 +27,10 @@ router.post('/:id/add', (req, res, next) => {
 
 router.get('/checkout', (req,res,next) => {
   let aggSum = 0;
-  let dataCart= [];
+  dataCart= [];
   Cart.findOne({userId:req.user._id})
   .then(data => {
+      if(data) {
       data.products.forEach((val,index) => {
       
        var clone = JSON.parse(JSON.stringify(val))
@@ -38,6 +39,7 @@ router.get('/checkout', (req,res,next) => {
        dataCart.push(clone)
        console.log(clone)
      })
+    }
     console.log(dataCart)
     
     
@@ -54,8 +56,8 @@ router.post('/payment',(req,res,next) => {
   
   let paymentId = [];
    //products:{$push:{productId:val.productId,quantity:val.quantity}
-     
-        
+     //{$push:{products:{productId:val.productId,quantity:val.quantity}}} 
+        console.log(dataCart, '   dataCart')
         Payment.create({userId:req.user._id})
         .then((data)=> {
           console.log(data, " created")
@@ -65,13 +67,27 @@ router.post('/payment',(req,res,next) => {
             console.log(paymentId ," vall")
           Payment.findByIdAndUpdate(paymentId,{$push:{products:{productId:val.productId,quantity:val.quantity}}} )
           .then(data => console.log(data, " updated"))
+          .then(()=> Cart.findOneAndDelete({userId:req.user._id})
+          .then(data => console.log('deleted'))
+          )
           .catch(err => next(err))
             }
 
           })
            res.render('beer/payment', {user:req.user}) 
 
-          
+           //Model.update({_id: id}, obj, {upsert: true, setDefaultsOnInsert: true}, cb)
+          /*  for(let val of dataCart) {
+           Payment.update({userId:req.user._id},
+            {$push:{products:{productId:val.productId,quantity:val.quantity}}},
+            {upsert: true})
+           .then(data => console.log(data, " updated"))
+           .then(()=> Cart.findOneAndDelete({userId:req.user._id}))
+           .then(data => console.log('deleted'))
+            .catch(err => next(err))
+           }
+           res.render('beer/payment', {user:req.user}) */
+
         //.catch(err => next(err))
         //{$push:{products:{productId:val.productId,quantity:val.quantity}}}
         /*console.log(dataCart, " dataCart")
@@ -126,3 +142,11 @@ module.exports = router;
   /*User.findOneAndUpdate({_id:req.user._id}, {$push:{purchased:{products:{$push:{productId:dataCart.productId, quantity:dataCart.quantity} },totalPaid:aggSum}}})
   .then(data => console.log('success'))
   .catch(err => next(err))*/
+
+  router.get('/history', (req, res) => {
+    Payment.find({userId:req.user._id}).populate('products.productId')
+    .then(data => {
+      res.render('beer/history', {data:data, user:req.user})
+      console.log(data, ' history')
+    })
+  })

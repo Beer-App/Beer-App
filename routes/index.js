@@ -7,13 +7,13 @@ var mongoose = require('mongoose');
   background: linear-gradient(to right, #0062E6, #33AEFF);*/
 /* GET home page. */
 router.get('/', (req, res, next) => {
-  
+  const userInfo =  req.user
   Beer.find()
-  .then(data => res.render('index', {data,user:req.user}))
+  .then(data => res.render('index', {data,user:userInfo}))
   .catch(err => next(err))
   let isCreated;
-  if(req.user) {
-    Cart.findOne({userId:mongoose.Types.ObjectId(req.user.id)})
+  if(userInfo) {
+    Cart.findOne({userId:mongoose.Types.ObjectId(userInfo._id)})
     .then(data => {
       if(!data) {
         console.log(data)
@@ -23,7 +23,7 @@ router.get('/', (req, res, next) => {
     .then( () => {
       if(isCreated !== undefined) {
         console.log(isCreated, " first ")
-        Cart.create({userId:req.user._id})
+        Cart.create({userId:userInfo._id})
         .then(data => console.log(data, " new cart"))
       }
       

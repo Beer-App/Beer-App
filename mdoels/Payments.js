@@ -7,12 +7,13 @@ const paymentSchema = new Schema({
             userId:{type:Schema.Types.ObjectId,ref:'User'},
             products:[{
             productId:{type: 
-                Schema.Types.ObjectId
+                Schema.Types.ObjectId,
+                ref:'Beer'
             },
+            date:{type:Date, default:Date.now()},
             quantity:{type:Number}
             }],
-            paymentType:{type:String, default:'IBAN'} ,
-            date:{type:Date, default:Date.now()}
+            paymentType:{type:String, default:'IBAN'} 
         
     
 

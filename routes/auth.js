@@ -62,8 +62,7 @@ router.post(
   );
   
   router.get('/logout', (req, res) => {
-    req.logout();
-    req.user = null
+    req.session.destroy();
     res.redirect('/');
   })
 

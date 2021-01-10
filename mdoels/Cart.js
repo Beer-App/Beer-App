@@ -9,10 +9,10 @@ const cartSchema = new Schema({
       },
       products: [
         {
-          productId:  mongoose.Schema.Types.ObjectId,
+          productId: {type: mongoose.Schema.Types.ObjectId, ref:'Beer'},
           quantity: Number,
           name: String,
-          price: Number
+          price: Number,
         }
       ],
       active: {
